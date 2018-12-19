@@ -45,7 +45,7 @@ configure(distributions()) {
     version = version
 
     apply plugin: 'java'
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -68,16 +68,22 @@ configure(distributions()) {
     def releasesMavenUrl = 's3://maven.tastyworks.com/releases'
     def snapshotsMavenUrl = 's3://maven.tastyworks.com/snapshots'
     def repositoryUrl = isSnapshotVersion ? snapshotsMavenUrl : releasesMavenUrl
-    uploadArchives {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+            }
+        }
+
         repositories {
             maven {
-                url repositoryUrl
+                url = repositoryUrl
                 credentials(AwsCredentials) {
                     accessKey AWS_MAVEN_PUBLISH_KEY_ID
                     secretKey AWS_MAVEN_PUBLISH_SECRET_KEY
                 }
             }
-
         }
     }
 }
