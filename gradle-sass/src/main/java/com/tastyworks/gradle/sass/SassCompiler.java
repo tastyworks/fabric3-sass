@@ -3,6 +3,7 @@ package com.tastyworks.gradle.sass;
 import io.bit3.jsass.CompilationException;
 import io.bit3.jsass.Options;
 import io.bit3.jsass.Output;
+import io.bit3.jsass.OutputStyle;
 import org.gradle.api.GradleException;
 import org.gradle.api.logging.Logger;
 
@@ -20,13 +21,6 @@ class SassCompiler {
     enum SassSyntax {
         SCSS,
         SASS
-    }
-
-    enum OutputStyle {
-        COMPACT,
-        COMPRESSED,
-        EXPANDED,
-        NESTED
     }
 
     private Options options;
@@ -67,7 +61,7 @@ class SassCompiler {
     }
 
     void setOutputStyle(OutputStyle outputStyle) {
-        options.setOutputStyle(io.bit3.jsass.OutputStyle.values()[outputStyle.ordinal()]);
+        options.setOutputStyle(outputStyle);
     }
 
     void setInputSyntax(SassSyntax syntax) {

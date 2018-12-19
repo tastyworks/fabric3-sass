@@ -1,5 +1,6 @@
 package com.tastyworks.gradle.sass;
 
+import io.bit3.jsass.OutputStyle;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.internal.TaskInputsInternal;
@@ -55,7 +56,7 @@ class CompileSass extends DefaultTask {
 
     private void configureCompiler(SassExtension extension) {
         compiler.setInputSyntax(SassCompiler.SassSyntax.valueOf(extension.getInputSyntax().toUpperCase()));
-        compiler.setOutputStyle(SassCompiler.OutputStyle.valueOf(extension.getOutputStyle().toUpperCase()));
+        compiler.setOutputStyle(OutputStyle.valueOf(extension.getOutputStyle().toUpperCase()));
         compiler.addIncludePaths(extension.getIncludePaths().split(","));
 
         compiler.setSourceMapContents(extension.getSourceMapContents());
