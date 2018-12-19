@@ -1,0 +1,20 @@
+dependencies {
+  implementation 'io.bit3:jsass:5.5.4'
+}
+
+/*
+pluginBundle {
+  website = 'https://tastyworks.com/'
+  vcsUrl = 'https://github.com/tastyworks/gradle-sass'
+  description = 'Plugin for Sass compilation and continuous build'
+  tags = ['saas', 'tastyworks']
+  version = '4.0.0'
+
+  plugins {
+    fabric3SaasPlugin {
+      id = 'com.tastyworks.gradle.sass'
+      displayName = 'TW Gradle Saas plugin'
+    }
+  }
+}
+*/

@@ -1,4 +1,10 @@
-package org.fabric3.gradle.plugin.sass;
+package com.tastyworks.gradle.sass;
+
+import io.bit3.jsass.CompilationException;
+import io.bit3.jsass.Options;
+import io.bit3.jsass.Output;
+import org.gradle.api.GradleException;
+import org.gradle.api.logging.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,12 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.stream.Stream;
-
-import io.bit3.jsass.CompilationException;
-import io.bit3.jsass.Options;
-import io.bit3.jsass.Output;
-import org.gradle.api.GradleException;
-import org.gradle.api.logging.Logger;
 
 /**
  * Configures and executes the JSass compiler.
@@ -105,11 +105,9 @@ class SassCompiler {
     }
 
     private void write(File file, String data) {
-        //noinspection ResultOfMethodCallIgnored
         file.getParentFile().mkdirs();
         try (OutputStream stream = new FileOutputStream(file, false)) {
             stream.write(data.getBytes());
-            stream.close();
         } catch (IOException e) {
             logger.error("Error writing file: " + file.getName(), e);
         }

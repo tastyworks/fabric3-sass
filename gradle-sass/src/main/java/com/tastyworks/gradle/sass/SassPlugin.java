@@ -1,14 +1,14 @@
-package org.fabric3.gradle.plugin.sass;
-
-import javax.inject.Inject;
+package com.tastyworks.gradle.sass;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
+import javax.inject.Inject;
+
 /**
  * Compiles Sass to CSS.
  */
-public class Fabric3SassPlugin implements Plugin<Project> {
+public class SassPlugin implements Plugin<Project> {
 
     @Inject
     public void apply(Project project) {

@@ -14,7 +14,7 @@
  *
  * To publish the plugin to the Gradle plugin repository, run the 'publishPlugins' task.
  */
-project.description = 'Fabric3 Gradle Sass plugin'
+project.description = 'tastyworks Gradle Sass plugin'
 
 if (hasProperty('build')) {
     ext.build = project['build']
@@ -24,15 +24,7 @@ if (hasProperty('build')) {
 if (ext.build == 'deploy') {
     defaultTasks 'uploadArchives'
 } else {
-    defaultTasks 'clean', 'assemble', 'install'
-}
-
-if (!hasProperty('sonatypeUsername')) {
-    project.ext.sonatypeUsername = "undefined"
-}
-
-if (!hasProperty('sonatypePassword')) {
-    project.ext.sonatypePassword = "undefined"
+    defaultTasks 'clean', 'assemble'
 }
 
 allprojects {
@@ -49,24 +41,18 @@ def distributions() {
 }
 
 configure(distributions()) {
-    group = fabric3Group
+    group = group
     version = version
-    def releaseBuild = !version.endsWith('SNAPSHOT');
 
     apply plugin: 'java'
     apply plugin: 'maven'
-    apply plugin: 'signing'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     dependencies {
-        compile gradleApi()
-        testCompile 'junit:junit:4.5'
-    }
-
-    if (project.hasProperty("skipSources")) {
-        return
+        implementation gradleApi()
+        testImplementation 'junit:junit:4.5'
     }
 
     task sourcesJar(type: Jar) {
@@ -74,100 +60,24 @@ configure(distributions()) {
         from sourceSets.main.allSource
     }
 
-    task docJar(type: Jar, dependsOn: javadoc) {
-        classifier 'javadoc'
-        from javadoc.destinationDir
-    }
-
     artifacts {
         archives jar
-        archives sourcesJar
-        archives docJar
     }
 
-    install.repositories.mavenInstaller.pom.whenConfigured { pom ->
-        pom.project { project ->
-            url 'http://fabric3.org'
-            name 'Fabric3'
-            description 'Fabric3'
-            scm {
-                url 'scm:git@github.com:Fabric3/fabric3-sass-plugin.git'
-                connection 'scm:git@github.com:Fabric3/fabric3-sass-plugin'
-                developerConnection 'scm:git@github.com:Fabric3/fabric3-sass-plugin'
-            }
-
-            licenses {
-                license {
-                    name 'Apache 2'
-                    url 'http://www.fabric3.org/license.html'
-                    distribution 'repo'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'fabric3'
-                    name 'Fabric3 Project'
-                }
-            }
-        }
-    }
-
+    def isSnapshotVersion = version.endsWith('SNAPSHOT');
+    def releasesMavenUrl = 's3://maven.tastyworks.com/releases'
+    def snapshotsMavenUrl = 's3://maven.tastyworks.com/snapshots'
+    def repositoryUrl = isSnapshotVersion ? snapshotsMavenUrl : releasesMavenUrl
     uploadArchives {
         repositories {
-            if (releaseBuild) {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-                        authentication(userName: sonatypeUsername, password: sonatypePassword)
-                    }
-
-                    pom.project {
-                        url 'http://fabric3.org'
-                        name 'Fabric3'
-                        description 'Fabric3'
-
-                        scm {
-                            url 'scm:git@github.com:Fabric3/fabric3-sass-plugin.git'
-                            connection 'scm:git@github.com:Fabric3/fabric3-sass-plugin.git'
-                            developerConnection 'scm:git@github.com:Fabric3/fabric3-sass-plugin.git'
-                        }
-
-                        licenses {
-                            license {
-                                name 'Apache 2'
-                                url 'http://www.fabric3.org/license.html'
-                                distribution 'repo'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id 'fabric3'
-                                name 'Fabric3 Project'
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                    repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-                        authentication(userName: sonatypeUsername, password: sonatypePassword)
-                    }
+            maven {
+                url repositoryUrl
+                credentials(AwsCredentials) {
+                    accessKey AWS_MAVEN_PUBLISH_KEY_ID
+                    secretKey AWS_MAVEN_PUBLISH_SECRET_KEY
                 }
             }
-        }
 
-        signing {
-            required { releaseBuild && (build == 'full' || build == 'deploy') }
-            sign configurations.archives
         }
     }
-}
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.5'
 }

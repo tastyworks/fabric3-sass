@@ -1,4 +1,4 @@
-package org.fabric3.gradle.plugin.sass;
+package com.tastyworks.gradle.sass;
 
 /**
  * Plugin configuration extension.

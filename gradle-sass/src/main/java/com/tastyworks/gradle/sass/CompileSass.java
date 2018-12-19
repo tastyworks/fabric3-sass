@@ -1,11 +1,12 @@
-package org.fabric3.gradle.plugin.sass;
-
-import java.io.File;
-import java.nio.file.Paths;
+package com.tastyworks.gradle.sass;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
+import org.gradle.api.internal.TaskInputsInternal;
 import org.gradle.api.tasks.TaskAction;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * Task to compile a set of Sass files to CSS.
@@ -28,8 +29,11 @@ class CompileSass extends DefaultTask {
             outputFile = resolveOutputFile(extension);
 
             // setup inputs and outputs for up-to-date determination and watches
-            getInputs().dir(extension.getIncludePaths().split(","));
-            getInputs().dir(inputFile.getParent());
+            final TaskInputsInternal inputs = getInputs();
+            for(String inputPath : extension.getIncludePaths().split(",")) {
+                inputs.dir(inputPath);
+            }
+            inputs.dir(inputFile.getParent());
             getOutputs().file(outputFile);
 
             configureCompiler(extension);
