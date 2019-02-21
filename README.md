@@ -1,34 +1,34 @@
-Fabric3 Sass Plugin
+Forked from Fabric3 Sass Plugin
 =========================
 
-The Fabric3 Sass plugin provides compilation of Sass files as part of a Gradle build. The plugin is based on the LibSass library (http://sass-lang
-.com/libsass) for fast compilation. The Fabric3 Sass plugin is licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0).  
+The Gradle Sass plugin provides compilation of Sass files as part of a Gradle build. The plugin is based on the LibSass library (http://sass-lang
+.com/libsass) for fast compilation. The Fabric3 Sass plugin is licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0).
 
 
 Use
 ------------------------
 
 Add the plugin dependency to your build script:
- 
+
     buildscript {
          dependencies {
-            classpath 'org.fabric3.gradle:fabric3-sass:[version]'
+            classpath group: 'com.tastyworks', name: 'gradle-sass', version: '<version>'
          }
     }
 
 apply the plugin:
 
 
-    apply plugin: 'fabric3-sass'
-    
+    apply plugin: 'gradle-sass'
+
 and optionally configure it:
-    
+
     sass {
         inputFilePath = "src/main/webapp/assets/scss/app.scss"
         includePaths "src/main/webapp/assets/app/scss"
         outputFilePath = "build/sass/scss/app.css"
     }
-    
+
 Note paths are interpreted relative to the current project path.
 
 The plugin will add the 'compileSass' task to your project. Further tasks can be added to copy the compiled output and create a web app:
@@ -47,11 +47,11 @@ Configuration
 
 The following plugin properties may be configured:
 
- - **inputSyntax**: The input syntax, 'scss' (default) or 'sass'  
+ - **inputSyntax**: The input syntax, 'scss' (default) or 'sass'
  - **outputStyle**: The output style, 'nested' (default), 'compact', 'compressed', or 'expanded'
- - **inputFilePath**: The main Sass file path, relative to the current project path 
- - **outputFilePath**: The compiled file path, relative to the current project path 
- - **sourceMapPath**: The source map file path, relative to the current project path  
+ - **inputFilePath**: The main Sass file path, relative to the current project path
+ - **outputFilePath**: The compiled file path, relative to the current project path
+ - **sourceMapPath**: The source map file path, relative to the current project path
  - **includePaths**: A comma separated list of paths to include as part of the compilation,  relative to the current project path
  - **sourceComments**: true if inline source comments should be generated (default false)
  - **omitSourceMapping**: true if the sourceMappingUrl should be omitted in CSS output (default false)
@@ -75,4 +75,4 @@ Requirements are JDK 8.
 
 To build the source, execute the Gradle script, e.g. on *Nix:
 
-    ./gradlew 
+    ./gradlew
