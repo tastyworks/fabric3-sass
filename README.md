@@ -1,3 +1,7 @@
+# DEPRECATED - replaced with Dart SASS Compiler/Plugin
+
+Jsass is no longer supported
+
 Forked from Fabric3 Sass Plugin
 =========================
 
